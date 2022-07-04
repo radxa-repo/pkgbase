@@ -42,7 +42,7 @@ build_pkg() {
         if_func "${PREFIX}_pre_dependency"
         pb_loaded_do dependency
         if_func "${PREFIX}_post_dependency"
-    done
+    fi
 
     if_func "${PREFIX}_pre_prepare"
     pb_loaded_do prepare

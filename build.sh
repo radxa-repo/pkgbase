@@ -8,7 +8,7 @@ main() {
     then
         source "$SCRIPT_DIR/pkg.conf"
     else
-        source $1
+        source $(realpath $1)
     fi
 
     for PKG in ${PB_PKGS[@]}
