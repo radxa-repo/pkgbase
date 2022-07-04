@@ -1,0 +1,5 @@
+PB_PKGS=( "shell" )
+
+shell_package() {
+    echo "Shell package can build in ways you like."
+}

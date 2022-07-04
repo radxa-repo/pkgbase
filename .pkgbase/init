@@ -1,0 +1,60 @@
+pb_load() {
+    local _PB_INIT_PREFIX
+    for PKG_TYPE in $*
+    do
+        echo "Loading $PKGBASE_DIR/$PKG_TYPE.conf"
+        source "$PKGBASE_DIR/$PKG_TYPE.conf"
+        PB_LOADED+=( $_PB_INIT_PREFIX )
+    done
+}
+
+pb_loaded_do() {
+    local ACTION="$1"
+    for i in ${PB_LOADED[@]}
+    do
+        if_func ${i}_${ACTION}
+    done
+}
+
+pb_unload() {
+    PB_MODULES=()
+    PB_LOADED=()
+}
+
+if_func() {
+    if [[ $(type -t "$1") == function ]]
+    then
+        "$1"
+    fi
+}
+
+build_pkg() {
+    local PREFIX="$1"
+
+    "${PREFIX}_package"
+
+    if_func "${PREFIX}_pre_load"
+    pb_load ${PB_MODULES[@]}
+    if_func "${PREFIX}_post_load"
+
+    if [[ $GITHUB_ACTIONS == "true" ]]
+    then
+        if_func "${PREFIX}_pre_dependency"
+        pb_loaded_do dependency
+        if_func "${PREFIX}_post_dependency"
+    done
+
+    if_func "${PREFIX}_pre_prepare"
+    pb_loaded_do prepare
+    if_func "${PREFIX}_post_prepare"
+
+    if_func "${PREFIX}_pre_build"
+    pb_loaded_do build
+    if_func "${PREFIX}_post_build"
+
+    pb_unload
+}
+
+set -e
+PKGBASE_DIR="$SCRIPT_DIR/.pkgbase"
+pb_unload
