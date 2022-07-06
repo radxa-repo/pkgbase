@@ -2,8 +2,8 @@ pb_load() {
     local _PB_INIT_PREFIX
     for PKG_TYPE in $*
     do
-        echo "Loading $PKGBASE_DIR/$PKG_TYPE.conf"
-        source "$PKGBASE_DIR/$PKG_TYPE.conf"
+        echo "Loading $PKGBASE_DIR/$PKG_TYPE.mod"
+        source "$PKGBASE_DIR/$PKG_TYPE.mod"
         PB_LOADED+=( $_PB_INIT_PREFIX )
     done
 }

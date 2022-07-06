@@ -1,18 +1,18 @@
 _PB_INIT_PREFIX="fpm"
 
 fpm_dependency() {
-    if ! which ruby
+    if ! which ruby >/dev/null
     then
         sudo apt update && sudo apt install -y ruby
     fi
-    if ! which fpm
+    if ! which fpm >/dev/null
     then
         sudo gem i fpm -f
     fi
 }
 
 fpm_prepare() {
-    FPM_VERSION=${FPM_VERSION:-"$(cat "$SCRIPT_DIR/VERSION")"}
+    FPM_VERSION=${FPM_VERSION:-"$(cat "$PKG_DIR/VERSION")"}
     FPM_ARCH=${FPM_ARCH:-"all"}
     FPM_URL=${FPM_URL:-"https://github.com/radxa-pkg/$FPM_NAME"}
     FPM_ROOT=${FPM_ROOT:-"./root/"}
